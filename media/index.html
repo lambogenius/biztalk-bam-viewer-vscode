@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {{cspSource}}; script-src 'nonce-{{nonce}}';">
+  <link rel="stylesheet" href="{{media}}/style.css"><title>BizTalk BAM Viewer</title>
+</head><body>
+  <header><div><span class="eyebrow">BUSINESS ACTIVITY MONITORING</span><h1 id="title">Loading…</h1></div><div class="stats" id="stats"></div></header>
+  <nav><button id="activities" class="active">Activities</button><button id="views">Views</button><input id="search" type="search" placeholder="Filter names, types, references…"></nav>
+  <main><section id="error" class="error" hidden></section><section id="content" class="cards"></section></main>
+  <script nonce="{{nonce}}" src="{{media}}/main.js"></script>
+</body></html>
