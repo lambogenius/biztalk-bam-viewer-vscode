@@ -1,0 +1,30 @@
+{
+  "name": "biztalk-bam-viewer",
+  "displayName": "BizTalk BAM Viewer",
+  "description": "Inspect exported BizTalk Business Activity Monitoring definitions in VS Code.",
+  "version": "0.1.0",
+  "publisher": "lambogenius",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Visualization"],
+  "main": "extension.cjs",
+  "activationEvents": ["onCustomEditor:biztalkBamViewer.editor", "onCommand:biztalkBamViewer.open"],
+  "contributes": {
+    "commands": [{ "command": "biztalkBamViewer.open", "title": "BizTalk: Open BAM Viewer" }],
+    "customEditors": [{
+      "viewType": "biztalkBamViewer.editor",
+      "displayName": "BizTalk BAM Viewer",
+      "selector": [{ "filenamePattern": "*.xml" }, { "filenamePattern": "*.bam" }],
+      "priority": "option"
+    }]
+  },
+  "files": ["extension.cjs", "media/**", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test",
+    "package": "npm run build && npx @vscode/vsce package --allow-missing-repository --out artifacts/biztalk-bam-viewer.vsix",
+    "prepackage:vsix": "npm run build",
+    "package:vsix": "npx @vscode/vsce package --allow-missing-repository --out artifacts/biztalk-bam-viewer.vsix",
+    "reinstall:extension": "node scripts/reinstall-extension.js"
+  }
+}
