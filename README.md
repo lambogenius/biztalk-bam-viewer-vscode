@@ -1,5 +1,7 @@
 # BizTalk BAM Viewer
 
+[![Source on GitHub](https://img.shields.io/badge/source-GitHub-181717?logo=github)](https://github.com/lambogenius/biztalk-bam-viewer-vscode)
+
 A local-first, read-only VS Code custom editor for exported BizTalk Business Activity Monitoring definition XML.
 
 ## Features
@@ -14,6 +16,8 @@ A local-first, read-only VS Code custom editor for exported BizTalk Business Act
 The initial release reads exported BAM definition XML. Live BAM portal data, Tracking Profile Editor files, BAM database queries, deployment, and definition modification are outside this read-only scope.
 
 ## Install locally
+
+Source code: [GitHub repository](https://github.com/lambogenius/biztalk-bam-viewer-vscode)
 
 ```powershell
 npm run package:vsix
