@@ -23,7 +23,8 @@ test('build script creates artifacts directory and validates required files', ()
   const scriptPath = path.join(root, 'scripts', 'build.js');
   assert.ok(fs.existsSync(scriptPath), 'build script should exist');
 
-  const requiredFiles = ['extension.cjs', 'package.json', 'media/index.html', 'media/main.js', 'media/style.css'];
+  const requiredFiles = ['extension.cjs', 'package.json', 'media/index.html', 'media/main.js',
+  'media/parser.js', 'media/style.css'];
   for (const relativePath of requiredFiles) {
     assert.ok(fs.existsSync(path.join(root, relativePath)), `missing required file: ${relativePath}`);
   }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Self-written test file in the BAMDefinition format (BizTalk 2004/10 BAM schema), with made-up names. -->
+<BAMDefinition xmlns="http://schemas.microsoft.com/BizTalkServer/2004/10/BAM">
+  <Activity Name="PurchaseOrder" ID="ID1">
+    <Checkpoint Name="Received" ID="ID2" DataType="DATETIME" />
+    <Checkpoint Name="Approved" ID="ID3" DataType="DATETIME" />
+    <Checkpoint Name="OrderNumber" ID="ID4" DataType="NVARCHAR" DataLength="50" />
+    <Checkpoint Name="Amount" ID="ID5" DataType="FLOAT" />
+  </Activity>
+  <Activity Name="Shipment" ID="ID6">
+    <Checkpoint Name="Shipped" ID="ID7" DataType="DATETIME" />
+    <Checkpoint Name="Carrier" ID="ID8" DataType="NVARCHAR" DataLength="30" />
+  </Activity>
+  <View Name="OrderTracking" ID="ID9">
+    <ActivityView Name="ViewPurchaseOrder" ID="ID10" ActivityRef="ID1">
+      <Alias Name="OrderReceived" ID="ID11">
+        <CheckpointRef>ID2</CheckpointRef>
+      </Alias>
+      <Alias Name="OrderAmount" ID="ID12">
+        <CheckpointRef>ID5</CheckpointRef>
+      </Alias>
+      <Duration Name="ApprovalTime" ID="ID13" TimeResolution="Minute">
+        <StartRef>ID11</StartRef>
+        <EndRef>ID3</EndRef>
+      </Duration>
+    </ActivityView>
+    <ActivityView Name="ViewShipment" ID="ID14" ActivityRef="ID6" />
+  </View>
+  <Cube Name="OrderTrackingCube" ID="ID15" CreateOlapCube="true" ViewRef="ID9">
+    <Measure Name="OrderCount" ID="ID16" AggregationFunction="Count" />
+    <Measure Name="TotalAmount" ID="ID17" AggregationFunction="Sum">
+      <AliasRef>ID12</AliasRef>
+    </Measure>
+    <TimeDimension Name="ReceivedTime" ID="ID18" />
+    <ProgressDimension Name="OrderProgress" ID="ID19" />
+  </Cube>
+</BAMDefinition>

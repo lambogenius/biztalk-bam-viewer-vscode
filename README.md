@@ -7,8 +7,9 @@ A local-first, read-only VS Code custom editor for exported BizTalk Business Act
 ## Features
 
 - Opens exported `.xml` and `.bam` definition files through **Open With...**.
+- Reads the BAMDefinition format exported by `bm.exe get-defxml` and the BAM Excel add-in: `DATETIME` checkpoints show as milestones, other checkpoints as data items, and ID references (`ActivityRef`, `CheckpointRef`, `ViewRef`) show as names.
 - Browses activities, business milestones, data items, and relationships.
-- Browses views, activity references, aliases, measures, and dimensions.
+- Browses views, activity references, aliases and durations, and the measures and dimensions of each view's cube.
 - Filters definitions by names, types, and references.
 - Refreshes when the underlying XML document changes.
 - Keeps BAM definitions local; the extension makes no network calls.
