@@ -10,6 +10,7 @@ const requiredFiles = [
   'LICENSE',
   'media/index.html',
   'media/main.js',
+  'media/parser.js',
   'media/style.css',
 ];
 

@@ -3,48 +3,13 @@
   const state = { model: null, mode: 'activities', query: '' };
   const $ = id => document.getElementById(id);
   const esc = value => { const span = document.createElement('span'); span.textContent = value ?? ''; return span.innerHTML; };
-  const attr = (node, ...names) => { for (const name of names) { const value = node?.getAttribute(name); if (value != null) return value; } return ''; };
-  const local = node => node.localName.toLowerCase();
-  const descendants = (node, names) => [...node.getElementsByTagName('*')].filter(item => names.includes(local(item)));
-  const firstAttr = (node, names) => { for (const name of names) { const value = attr(node, name, name[0].toUpperCase() + name.slice(1)); if (value) return value; } return ''; };
-  const ownDescendants = (node, names, ownerNames) => descendants(node, names).filter(item => {
-    let parent = item.parentElement;
-    while (parent && parent !== node) { if (ownerNames.includes(local(parent))) return false; parent = parent.parentElement; }
-    return true;
-  });
-
-  function parseItem(node) {
-    const kind = local(node);
-    return {
-      name: firstAttr(node, ['name']) || node.localName,
-      kind: kind.includes('milestone') ? 'Milestone' : kind.includes('data') || kind === 'activityitem' ? 'Data item' : node.localName,
-      type: firstAttr(node, ['dataType', 'datatype', 'type']),
-      reference: firstAttr(node, ['activityItemRef', 'activityref', 'milestoneRef', 'dataItemRef', 'ref']),
-    };
-  }
-
-  function parse(fileName, source) {
+  const parseXml = source => {
     const xml = new DOMParser().parseFromString(source, 'application/xml');
     const parseError = xml.querySelector('parsererror');
     if (parseError) throw new Error(`Invalid BAM XML: ${parseError.textContent.split('\n')[0]}`);
-    const rootName = local(xml.documentElement);
-    if (!rootName.includes('bam') && !descendants(xml.documentElement, ['activity', 'view']).length) throw new Error('This does not appear to be an exported BizTalk BAM definition.');
-    const activityNodes = descendants(xml.documentElement, ['activity']).filter(node => !node.closest || !node.parentElement || local(node.parentElement) !== 'activityview');
-    const activities = activityNodes.map((node, index) => ({
-      name: firstAttr(node, ['name']) || `Activity ${index + 1}`,
-      items: ownDescendants(node, ['activityitem', 'businessdata', 'businessmilestone', 'milestone'], ['activity', 'view']).map(parseItem),
-      relationships: ownDescendants(node, ['relatedactivity', 'activityrelationship', 'relationship'], ['activity', 'view']).map(item => ({ name: firstAttr(item, ['name']) || item.localName, reference: firstAttr(item, ['activityRef', 'activityref', 'ref', 'relatedActivity']) })),
-    }));
-    const views = descendants(xml.documentElement, ['view']).map((node, index) => ({
-      name: firstAttr(node, ['name']) || `View ${index + 1}`,
-      activities: descendants(node, ['activityview']).map(item => firstAttr(item, ['activityRef', 'activityref', 'name'])).filter(Boolean),
-      aliases: descendants(node, ['alias', 'viewitem']).map(parseItem),
-      measures: descendants(node, ['measure']).map(item => ({ ...parseItem(item), aggregation: firstAttr(item, ['aggregationFunction', 'aggregation', 'function']) })),
-      dimensions: descendants(node, ['dimension', 'progressdimension', 'timedimension', 'numericrange']).map(parseItem),
-    }));
-    if (!activities.length && !views.length) throw new Error('No BAM Activity or View elements were found.');
-    return { fileName, activities, views };
-  }
+    return xml;
+  };
+  const parse = (fileName, source) => self.BamParser.parse(fileName, source, parseXml);
 
   function row(item) {
     const detail = [item.type, item.reference && `→ ${item.reference}`, item.aggregation].filter(Boolean).join(' · ');
